@@ -1,0 +1,9 @@
+server:
+  port: 8084
+
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://postgres:5432/order_db}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver

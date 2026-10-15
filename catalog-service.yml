@@ -1,0 +1,11 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://postgres:5432/catalog_db}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URIS:http://elasticsearch:9200}

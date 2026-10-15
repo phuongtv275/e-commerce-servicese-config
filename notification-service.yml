@@ -1,0 +1,12 @@
+server:
+  port: 8086
+
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://postgres:5432/notification_db}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  mail:
+    host: ${MAIL_HOST:mailhog}
+    port: ${MAIL_PORT:1025}
