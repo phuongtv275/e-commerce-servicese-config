@@ -7,3 +7,153 @@ spring:
       host: ${REDIS_HOST:redis-cache}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:rikkeiacademy}
+      timeout: 2000ms
+
+  cloud:
+    gateway:
+      routes:
+        # =====================================================================
+        # 1. IDENTITY SERVICE (Port 8081)
+        # =====================================================================
+        - id: identity-public-auth
+          uri: http://identity-service:8081
+          predicates:
+            - Path=/api/v1/auth/**
+          metadata:
+            targetService: identity-service
+
+        - id: identity-protected-users
+          uri: http://identity-service:8081
+          predicates:
+            - Path=/api/v1/users/**, /api/v1/admin/users/**
+          metadata:
+            targetService: identity-service
+
+        # =====================================================================
+        # 2. CATALOG SERVICE (Port 8082)
+        # =====================================================================
+        - id: catalog-public
+          uri: http://catalog-service:8082
+          predicates:
+            - Path=/api/v1/catalog/products/**, /api/v1/catalog/categories/**, /api/v1/catalog/brands/**, /api/v1/catalog/search/**
+          metadata:
+            targetService: catalog-service
+
+        - id: catalog-admin
+          uri: http://catalog-service:8082
+          predicates:
+            - Path=/api/v1/catalog/admin/**
+          metadata:
+            targetService: catalog-service
+
+        # =====================================================================
+        # 3. INVENTORY SERVICE (Port 8083)
+        # =====================================================================
+        - id: inventory-service-routes
+          uri: http://inventory-service:8083
+          predicates:
+            - Path=/api/v1/inventory/**
+          metadata:
+            targetService: inventory-service
+
+        # =====================================================================
+        # 4. ORDER SERVICE (Port 8084)
+        # =====================================================================
+        - id: order-service-routes
+          uri: http://order-service:8084
+          predicates:
+            - Path=/api/v1/orders/**
+          metadata:
+            targetService: order-service
+
+        # =====================================================================
+        # 5. PAYMENT SERVICE (Port 8085)
+        # =====================================================================
+        - id: payment-momo-ipn-webhook
+          uri: http://payment-service:8085
+          predicates:
+            - Path=/api/v1/payments/momo/ipn
+            - Method=POST
+          metadata:
+            targetService: payment-service
+
+        - id: payment-service-routes
+          uri: http://payment-service:8085
+          predicates:
+            - Path=/api/v1/payments/**, /api/v1/admin/payments/**
+          metadata:
+            targetService: payment-service
+
+        # =====================================================================
+        # 6. NOTIFICATION SERVICE (Port 8086)
+        # =====================================================================
+        - id: notification-admin-routes
+          uri: http://notification-service:8086
+          predicates:
+            - Path=/api/v1/admin/notifications/**
+          metadata:
+            targetService: notification-service
+
+        # =====================================================================
+        # 7. CANONICAL ADMIN OUTBOX REPLAY ROUTES (Port 8081-8086)
+        # =====================================================================
+        - id: admin-outbox-identity
+          uri: http://identity-service:8081
+          predicates:
+            - Path=/api/v1/admin/identity/outbox/**
+          metadata:
+            targetService: identity-service
+
+        - id: admin-outbox-catalog
+          uri: http://catalog-service:8082
+          predicates:
+            - Path=/api/v1/admin/catalog/outbox/**
+          metadata:
+            targetService: catalog-service
+
+        - id: admin-outbox-inventory
+          uri: http://inventory-service:8083
+          predicates:
+            - Path=/api/v1/admin/inventory/outbox/**
+          metadata:
+            targetService: inventory-service
+
+        - id: admin-outbox-order
+          uri: http://order-service:8084
+          predicates:
+            - Path=/api/v1/admin/order/outbox/**
+          metadata:
+            targetService: order-service
+
+        - id: admin-outbox-payment
+          uri: http://payment-service:8085
+          predicates:
+            - Path=/api/v1/admin/payment/outbox/**
+          metadata:
+            targetService: payment-service
+
+        - id: admin-outbox-notification
+          uri: http://notification-service:8086
+          predicates:
+            - Path=/api/v1/admin/notification/outbox/**
+          metadata:
+            targetService: notification-service
+
+jwt:
+  secret-key: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  whitelist-paths:
+    - /api/v1/auth/**
+    - /identity/api/v1/auth/**
+    - /api/v1/catalog/products/**
+    - /api/v1/catalog/categories/**
+    - /api/v1/catalog/brands/**
+    - /api/v1/catalog/search/**
+    - /api/v1/payments/momo/ipn
+    - /actuator/**
+
+gateway:
+  assertion:
+    private-key: ${GATEWAY_ASSERTION_PRIVATE_KEY:}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:8080}
