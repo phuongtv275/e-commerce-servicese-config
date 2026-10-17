@@ -29,7 +29,7 @@ app:
 
 security:
   gateway-assertion:
-    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz4TLax/QVgMNtuguwi5K\n9RX9Op/M/poTIQ8kVSo5YL2d4epmCQUWjzoCZHllij3e/11tqplVAao1nT8Dinzm\nrCLf6vz/IEWuanQH542MGgGrHW6ysi2fNlysYgnZjryKbS/x1lUGRUCdvtst+S0g\nSVIiN7H5hdLH7jas6qDKpeInvOQA0SqR4JsbzMx6B15/xf2yt6ApzvSZIKnkc8Ii\nM6LJ3CM0bCw3xK/X1MPy2uAj9ZxG7ORjpCJKnqyHaQIkx0amO78LkUJykA5GfusY\n40zeiZTNfB256OPpyVJ5rAPZaBitLlru0GSBSpmqTI0Ch0kMF7evkqPNWDCO/1yk\nmwIDAQAB\n-----END PUBLIC KEY-----}"
+    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
   internal-service-keys:
     order-service: "${INTERNAL_KEY_ORDER:order-service-secret-key-32chars}"
     notification-service: "${INTERNAL_KEY_NOTIFICATION:notification-service-secret-key-32c}"
