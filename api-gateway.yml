@@ -9,7 +9,7 @@ spring:
       - org.springframework.boot.security.reactive.autoconfigure.ReactiveUserDetailsServiceAutoConfiguration
   data:
     redis:
-      host: ${REDIS_HOST:redis-cache}
+      host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:rikkeiacademy}
       timeout: 2000ms
@@ -28,14 +28,14 @@ spring:
         # 1. IDENTITY SERVICE (Port 8081)
         # =====================================================================
         - id: identity-public-auth
-          uri: http://identity-service:8081
+          uri: http://${IDENTITY_SERVICE_URL:localhost:8081}
           predicates:
             - Path=/api/v1/auth/**
           metadata:
             targetService: identity-service
 
         - id: identity-protected-users
-          uri: http://identity-service:8081
+          uri: http://${IDENTITY_SERVICE_URL:localhost:8081}
           predicates:
             - Path=/api/v1/users/**, /api/v1/admin/users/**
           metadata:
@@ -45,14 +45,14 @@ spring:
         # 2. CATALOG SERVICE (Port 8082)
         # =====================================================================
         - id: catalog-public
-          uri: http://catalog-service:8082
+          uri: http://${CATALOG_SERVICE_URL:localhost:8082}
           predicates:
             - Path=/api/v1/catalog/products/**, /api/v1/catalog/categories/**, /api/v1/catalog/brands/**, /api/v1/catalog/search/**
           metadata:
             targetService: catalog-service
 
         - id: catalog-admin
-          uri: http://catalog-service:8082
+          uri: http://${CATALOG_SERVICE_URL:localhost:8082}
           predicates:
             - Path=/api/v1/catalog/admin/**
           metadata:
@@ -62,7 +62,7 @@ spring:
         # 3. INVENTORY SERVICE (Port 8083)
         # =====================================================================
         - id: inventory-service-routes
-          uri: http://inventory-service:8083
+          uri: http://${INVENTORY_SERVICE_URL:localhost:8083}
           predicates:
             - Path=/api/v1/inventory/**
           metadata:
@@ -72,7 +72,7 @@ spring:
         # 4. ORDER SERVICE (Port 8084)
         # =====================================================================
         - id: order-service-routes
-          uri: http://order-service:8084
+          uri: http://${ORDER_SERVICE_URL:localhost:8084}
           predicates:
             - Path=/api/v1/orders/**
           metadata:
@@ -82,7 +82,7 @@ spring:
         # 5. PAYMENT SERVICE (Port 8085)
         # =====================================================================
         - id: payment-momo-ipn-webhook
-          uri: http://payment-service:8085
+          uri: http://${PAYMENT_SERVICE_URL:localhost:8085}
           predicates:
             - Path=/api/v1/payments/momo/ipn
             - Method=POST
@@ -90,7 +90,7 @@ spring:
             targetService: payment-service
 
         - id: payment-service-routes
-          uri: http://payment-service:8085
+          uri: http://${PAYMENT_SERVICE_URL:localhost:8085}
           predicates:
             - Path=/api/v1/payments/**, /api/v1/admin/payments/**
           metadata:
@@ -100,7 +100,7 @@ spring:
         # 6. NOTIFICATION SERVICE (Port 8086)
         # =====================================================================
         - id: notification-admin-routes
-          uri: http://notification-service:8086
+          uri: http://${NOTIFICATION_SERVICE_URL:localhost:8086}
           predicates:
             - Path=/api/v1/admin/notifications/**
           metadata:
@@ -110,42 +110,42 @@ spring:
         # 7. CANONICAL ADMIN OUTBOX REPLAY ROUTES (Port 8081-8086)
         # =====================================================================
         - id: admin-outbox-identity
-          uri: http://identity-service:8081
+          uri: http://${IDENTITY_SERVICE_URL:localhost:8081}
           predicates:
             - Path=/api/v1/admin/identity/outbox/**
           metadata:
             targetService: identity-service
 
         - id: admin-outbox-catalog
-          uri: http://catalog-service:8082
+          uri: http://${CATALOG_SERVICE_URL:localhost:8082}
           predicates:
             - Path=/api/v1/admin/catalog/outbox/**
           metadata:
             targetService: catalog-service
 
         - id: admin-outbox-inventory
-          uri: http://inventory-service:8083
+          uri: http://${INVENTORY_SERVICE_URL:localhost:8083}
           predicates:
             - Path=/api/v1/admin/inventory/outbox/**
           metadata:
             targetService: inventory-service
 
         - id: admin-outbox-order
-          uri: http://order-service:8084
+          uri: http://${ORDER_SERVICE_URL:localhost:8084}
           predicates:
             - Path=/api/v1/admin/order/outbox/**
           metadata:
             targetService: order-service
 
         - id: admin-outbox-payment
-          uri: http://payment-service:8085
+          uri: http://${PAYMENT_SERVICE_URL:localhost:8085}
           predicates:
             - Path=/api/v1/admin/payment/outbox/**
           metadata:
             targetService: payment-service
 
         - id: admin-outbox-notification
-          uri: http://notification-service:8086
+          uri: http://${NOTIFICATION_SERVICE_URL:localhost:8086}
           predicates:
             - Path=/api/v1/admin/notification/outbox/**
           metadata:

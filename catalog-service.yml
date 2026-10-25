@@ -3,9 +3,48 @@ server:
 
 spring:
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://postgres:5432/catalog_db}
-    username: ${DATASOURCE_USERNAME:postgres}
-    password: ${DATASOURCE_PASSWORD:postgres}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/catalog_db}
+    username: ${DATASOURCE_USERNAME:${POSTGRES_USER:postgres}}
+    password: ${DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:postgres}}
     driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        default_batch_fetch_size: 50
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
   elasticsearch:
-    uris: ${ELASTICSEARCH_URIS:http://elasticsearch:9200}
+    enabled: true
+    uris: ${ELASTICSEARCH_URIS:http://${ELASTICSEARCH_HOST:localhost}:${ELASTICSEARCH_PORT:9200}}
+  kafka:
+    consumer:
+      group-id: catalog-indexer-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+    listener:
+      ack-mode: manual
+
+catalog:
+  index:
+    name: product_catalog
+  search:
+    max-page-size: 100
+    max-offset-window: 200
+    cursor-pit-keep-alive-minutes: 1
+
+security:
+  gateway-assertion:
+    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
+  internal-service-keys:
+    order-service: "${INTERNAL_KEY_ORDER:}"
