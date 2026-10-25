@@ -12,3 +12,10 @@ spring:
       host: ${REDIS_HOST:redis-cache}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:rikkeiacademy}
+
+security:
+  gateway-assertion:
+    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
+  internal-service-keys:
+    order-service: "${INTERNAL_KEY_ORDER:}"
+    payment-service: "${INTERNAL_KEY_PAYMENT:}"

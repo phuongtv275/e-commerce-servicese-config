@@ -82,7 +82,7 @@ spring:
         # 5. PAYMENT SERVICE (Port 8085)
         # =====================================================================
         - id: payment-momo-ipn-webhook
-          uri: http://payment-service:8085
+          uri: http://${PAYMENT_SERVICE_URL:localhost:8085}
           predicates:
             - Path=/api/v1/payments/momo/ipn
             - Method=POST
@@ -90,7 +90,7 @@ spring:
             targetService: payment-service
 
         - id: payment-service-routes
-          uri: http://payment-service:8085
+          uri: http://${PAYMENT_SERVICE_URL:localhost:8085}
           predicates:
             - Path=/api/v1/payments/**, /api/v1/admin/payments/**
           metadata:
@@ -138,7 +138,7 @@ spring:
             targetService: order-service
 
         - id: admin-outbox-payment
-          uri: http://payment-service:8085
+          uri: http://${PAYMENT_SERVICE_URL:localhost:8085}
           predicates:
             - Path=/api/v1/admin/payment/outbox/**
           metadata:

@@ -7,3 +7,9 @@ spring:
     username: ${DATASOURCE_USERNAME:postgres}
     password: ${DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
+
+security:
+  gateway-assertion:
+    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
+  internal-service-keys:
+    payment-service: "${INTERNAL_KEY_PAYMENT}"

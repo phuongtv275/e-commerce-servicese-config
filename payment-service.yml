@@ -3,7 +3,29 @@ server:
 
 spring:
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://postgres:5432/payment_db}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/payment_db}
     username: ${DATASOURCE_USERNAME:postgres}
     password: ${DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
+
+services:
+  order-service:
+    base-url: ${ORDER_SERVICE_URL:http://order-service:8084}
+    internal-key: "${INTERNAL_KEY_PAYMENT}"
+
+security:
+  gateway-assertion:
+    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
+
+vnpay:
+  tmn-code: ${VNPAY_TMN_CODE}
+  hash-secret: "${VNPAY_HASH_SECRET}"
+  pay-url: ${VNPAY_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
+  api-url: ${VNPAY_API_URL:https://sandbox.vnpayment.vn/merchant_webapi/api/transaction}
+  return-url: ${VNPAY_RETURN_URL}
+  ipn-url: ${VNPAY_IPN_URL}
+  version: ${VNPAY_VERSION:2.1.0}
+  order-type: ${VNPAY_ORDER_TYPE:other}
+  locale: ${VNPAY_LOCALE:vn}
+  expire-minutes: ${VNPAY_EXPIRE_MINUTES:15}
+  ip-address: ${VNPAY_IP_ADDRESS}
