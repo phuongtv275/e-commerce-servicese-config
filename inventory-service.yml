@@ -12,3 +12,7 @@ spring:
       host: ${REDIS_HOST:redis-cache}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:rikkeiacademy}
+
+security:
+  internal-service-keys:
+    order-service: "${INTERNAL_KEY_ORDER:}"
