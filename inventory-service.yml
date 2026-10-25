@@ -7,8 +7,65 @@ spring:
     username: ${DATASOURCE_USERNAME:postgres}
     password: ${DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-  data:
-    redis:
-      host: ${REDIS_HOST:redis-cache}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:rikkeiacademy}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  kafka:
+    consumer:
+      group-id: inventory-reservation-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual
+
+security:
+  gateway-assertion:
+    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
+  internal-service-keys:
+    order-service: "${INTERNAL_KEY_ORDER:}"
+
+inventory:
+  reservation:
+    ttl: ${INVENTORY_RESERVATION_TTL:15m}
+    expiry-interval-ms: ${INVENTORY_EXPIRY_INTERVAL_MS:30000}
+    expiry-initial-delay-ms: ${INVENTORY_EXPIRY_INITIAL_DELAY_MS:10000}
+    expiry-batch-size: ${INVENTORY_EXPIRY_BATCH_SIZE:100}
+  kafka:
+    consumer-group: inventory-reservation-group
+    topic:
+      payment-succeeded: payment.succeeded
+      payment-failed: payment.failed
+      order-cancelled: order.cancelled
+      reservation-expired: inventory.reservation-expired
+      reservation-commit-failed: inventory.reservation-commit-failed
+    dlt:
+      payment-succeeded: inventory.payment-succeeded.dlt
+    consumer:
+      max-attempts: ${INVENTORY_KAFKA_MAX_ATTEMPTS:3}
+      initial-backoff-ms: ${INVENTORY_KAFKA_INITIAL_BACKOFF_MS:100}
+      max-backoff-ms: ${INVENTORY_KAFKA_MAX_BACKOFF_MS:400}
+      dlt-suffix: .dlt
+
+outbox:
+  publisher:
+    interval-ms: ${OUTBOX_PUBLISHER_INTERVAL_MS:3000}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
