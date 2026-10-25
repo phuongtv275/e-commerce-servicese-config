@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://postgres:5432/catalog_db}
-    username: ${DATASOURCE_USERNAME:postgres}
-    password: ${DATASOURCE_PASSWORD:postgres}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/catalog_db}
+    username: ${DATASOURCE_USERNAME:${POSTGRES_USER:postgres}}
+    password: ${DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:postgres}}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -26,7 +26,7 @@ spring:
         enabled: true
   elasticsearch:
     enabled: true
-    uris: ${ELASTICSEARCH_URIS:http://localhost:9200}
+    uris: ${ELASTICSEARCH_URIS:http://${ELASTICSEARCH_HOST:localhost}:${ELASTICSEARCH_PORT:9200}}
   kafka:
     consumer:
       group-id: catalog-indexer-group

@@ -3,13 +3,13 @@ server:
 
 spring:
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://postgres:5432/inventory_db}
-    username: ${DATASOURCE_USERNAME:postgres}
-    password: ${DATASOURCE_PASSWORD:postgres}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/inventory_db}
+    username: ${DATASOURCE_USERNAME:${POSTGRES_USER:postgres}}
+    password: ${DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:postgres}}
     driver-class-name: org.postgresql.Driver
   data:
     redis:
-      host: ${REDIS_HOST:redis-cache}
+      host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:rikkeiacademy}
 
