@@ -44,7 +44,5 @@ catalog:
     cursor-pit-keep-alive-minutes: 1
 
 security:
-  gateway-assertion:
-    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
   internal-service-keys:
-    order-service: "${INTERNAL_KEY_ORDER:}"
+    order-service: "${INTERNAL_KEY_ORDER:e0de2d8d12cf23ec3ba59b392e0b52ee776e02cb8bc8dcdf30832fe86524c6e0}"

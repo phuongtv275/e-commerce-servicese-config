@@ -10,7 +10,3 @@ spring:
   mail:
     host: ${MAIL_HOST:mailhog}
     port: ${MAIL_PORT:1025}
-
-security:
-  gateway-assertion:
-    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
