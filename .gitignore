@@ -1,0 +1,19 @@
+# Agent & knowledge graph artifacts
+.codex/
+graphify-out/
+AGENTS.md
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
