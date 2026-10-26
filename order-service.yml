@@ -7,9 +7,38 @@ spring:
     username: ${DATASOURCE_USERNAME:${POSTGRES_USER:postgres}}
     password: ${DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:postgres}}
     driver-class-name: org.postgresql.Driver
+  kafka:
+    consumer:
+      group-id: order-service-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual
 
 security:
-  gateway-assertion:
-    public-key: "${GATEWAY_ASSERTION_PUBLIC_KEY:}"
   internal-service-keys:
-    payment-service: "${INTERNAL_KEY_PAYMENT}"
+    payment-service: "${INTERNAL_KEY_PAYMENT:a1fb2971af06749e5ef5f695720338b5611f6fa8d51bbbb476db7ab2eec22319}"
+
+order:
+  kafka:
+    consumer-group: order-service-group
+    topic:
+      payment-succeeded: payment.succeeded
+      payment-failed: payment.failed
+      reservation-expired: inventory.reservation-expired
+      reservation-commit-failed: inventory.reservation-commit-failed
+      order-created: order.created
+      order-status-changed: order.status-changed
+      order-cancelled: order.cancelled
+    dlt:
+      payment-succeeded: order.payment-succeeded.dlt
+      payment-failed: order.payment-failed.dlt
+      reservation-expired: order.reservation-expired.dlt
+      reservation-commit-failed: order.reservation-commit-failed.dlt
+    consumer:
+      max-attempts: ${ORDER_KAFKA_MAX_ATTEMPTS:3}
+      initial-backoff-ms: ${ORDER_KAFKA_INITIAL_BACKOFF_MS:1000}
+      max-backoff-ms: ${ORDER_KAFKA_MAX_BACKOFF_MS:4000}
+      dlt-suffix: .dlt
