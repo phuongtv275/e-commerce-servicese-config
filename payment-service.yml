@@ -10,7 +10,7 @@ spring:
 
 services:
   order-service:
-    base-url: ${ORDER_SERVICE_URL:http://order-service:8084}
+    base-url: ${ORDER_SERVICE_URL:http://localhost:8084}
     internal-key: "${INTERNAL_KEY_PAYMENT}"
 
 security:
