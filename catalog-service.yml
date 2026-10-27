@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/catalog_db}
-    username: ${DATASOURCE_USERNAME:${POSTGRES_USER:postgres}}
-    password: ${DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:postgres}}
+    url: ${SPRING_DATASOURCE_URL:${DATASOURCE_URL:jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/catalog_db}}
+    username: ${SPRING_DATASOURCE_USERNAME:${DATASOURCE_USERNAME:${POSTGRES_USER:postgres}}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:postgres}}}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -23,7 +23,7 @@ spring:
   data:
     elasticsearch:
       repositories:
-        enabled: true
+        enabled: ${SPRING_DATA_ELASTICSEARCH_REPOSITORIES_ENABLED:true}
   elasticsearch:
     enabled: true
     uris: ${ELASTICSEARCH_URIS:http://${ELASTICSEARCH_HOST:localhost}:${ELASTICSEARCH_PORT:9200}}
