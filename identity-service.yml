@@ -16,6 +16,17 @@ spring:
       hibernate:
         format_sql: false
         default_batch_fetch_size: 50
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      acks: all
+      retries: 3
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+outbox:
+  publisher:
+    interval-ms: ${OUTBOX_PUBLISHER_INTERVAL_MS:3000}
 
 app:
   jwt:
